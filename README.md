@@ -1,16 +1,7 @@
 # custom_nav
 
-A new Flutter project.
+Custom Flutter Bottom Nav Bar 
 
-## Getting Started
+![ScreenShot](https://raw.githubusercontent.com/diaaanek/flutter_custom_nav/master/Simulator%20Screen%20Shot%20-%20iPhone%2011%20-%202020-04-11%20at%2010.31.52.png)
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

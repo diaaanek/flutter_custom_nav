@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Flutter Demo ',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -57,16 +56,14 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   Animation<double> _fadeFabOutAnimation;
   Animation<double> _fadeFabInAnimation;
 
-  // Init Tween
   Tween<double> _positionTween;
 
-  // Alpha : used for fade in and out  and translate the icons
   double fabIconAlpha = 1;
 
   // Current selected tab
   int currentSelected = 0;
 
-  // Active Icons
+  // Active Icons --> Set add post as first option on tab
   IconData activeIcon = Icons.add_circle;
 
   @override
@@ -76,7 +73,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     // Set up Tween init state
     _positionTween = Tween<double>(begin: 0, end: 0);
 
-    // Set up the FADE OUT Animation Controller
+    // FADE OUT Animation Controller
     _fadeOutController = AnimationController(
       vsync: this,
       duration: Duration(
@@ -120,7 +117,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
 
     // Create the FADE IN Animation
     // Will be run everytime setState() is called
-    // The Alpha value will be animated from 0 to 1
+
     _fadeFabInAnimation = Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
             parent: _animationController,
@@ -153,7 +150,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   START : tab items
 ======================*/
 
-              // Home Tab
+              // Home Feed Tab
               TabItem(
                 selected: currentSelected == -1,
                 iconData: Icons.home,
@@ -168,7 +165,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                 },
               ),
 
-              //Add Tab
+              //Add Post Tab
               TabItem(
                 selected: currentSelected == 0,
                 iconData: Icons.add_circle,
@@ -200,50 +197,24 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
             ],
           ),
         ),
-
-/*======================
-  START : pointer
-======================*/
         IgnorePointer(
           child: Container(
             decoration: BoxDecoration(color: Colors.transparent),
-
-            /*
-              Use [FractionallySizedBox] widget with [widthFactor] to set the child width
-              widthFactor: 1/3 will make the child expand to 1/3th of the parent width
-              then use the [alignment] attribute to set the position of the circle
-            */
             child: Align(
-              // Same as per widthFactor for the height
               heightFactor: 1,
-              /*
-                Set the X position of the circle (-1 , 0 , 1)
-                _positionAnimation.value will be set from the tab icons upon click
-                values can be -1, 0 or 1
-              */
               alignment: Alignment(_positionAnimation.value, 0),
               child: FractionallySizedBox(
-                /*
-                  Child widget will expand to 1/3th  width of the parent
-                */
                 widthFactor: 1 / 3,
-
-                /*
-                   START : circle
-                */
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     Transform.translate(
-                      // Pull up the circle by half of its size
                       offset: Offset(0.0, -40.0),
                       child: Stack(
                         alignment: Alignment.center,
                         children: <Widget>[
                           /*
-                            The background of the white circle
-                            it needs to get the same background colors of the canvas
-                            so it maked the 'hole' effect
+                            background of circle SAME as background of page
                            */
                           Container(
                             height: 80,
@@ -257,19 +228,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                           ),
 
                           /*
-                            The icosn container
+                            icosn container
                             wrapped inside a [Opacity] Widget so it can be faded in and out by the contollers
-                            Also wrapped with a [Transform.translate] widget so it can be moved up adn down
+                            
                           */
                           Opacity(
-                            /* fabIconAlpha is managed by the fadein and out animations */
                             opacity: fabIconAlpha,
                             child: Transform.translate(
-                              /* 
-                                fabIconAlpha is managed by the translation animation
-                                when fabIconAlpha = 0 pushed the icon down
-                                when fabIconAlpha = 1 animate the icon up
-                              */
                               offset: Offset(0.0, (25 - 25 * fabIconAlpha)),
                               child: Container(
                                 width: 50,
@@ -279,7 +244,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                                   /* The background of the circle */
                                   color: Colors.white,
 
-                                  /* Make the Container rounded */
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(40),
                                   ),
@@ -307,9 +271,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                     ),
 
                     /*
-                      The clip path 
-                      used to make the 'hole' smoothly match the tabs bar baskground
-                      creating a soft curve
+                    
                       !! Can be improved !!
                     */
                     ClipPath(
@@ -322,25 +284,17 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                     ),
                   ],
                 ),
-                //
-                // END: circle
-                //
               ),
             ),
           ),
         ),
-/*======================
-  END : pointer
-======================*/
       ],
     );
   }
 
   _initAnimationAndStart(double from, double to) {
-    // From = current animation value. Can be -1, 0 or 1
     _positionTween.begin = from;
 
-    // To = the tab we want to animate to. Can be -1, or 1
     _positionTween.end = to;
 
     _fadeOutController.reset();
@@ -384,34 +338,23 @@ class _TabItemState extends State<TabItem> {
         onTap: () => widget.callbackFunction(),
 
         child: Container(
-          /*
-            ??Possible bug?? 
-            Workaround
-            Without the background only the icon and the label is tappable 
-            with the background all the tab become tappable
-          */
           color: Colors.transparent,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // The Icon
-              /*
-                Use Animated Opacity to fade in and out the Icons
-                depending on the tab slected status
-              */
+              // TODOL change styles on non active icons
               AnimatedOpacity(
                 duration: Duration(milliseconds: 200),
                 opacity: widget.selected ? 0.0 : 1.0,
                 child: Icon(
                   widget.iconData,
                   size: 28,
-                  color: Colors.black54,
+                  color: Colors.black26,
                 ),
               ),
 
               /*
-                Use Animated Container to animate the space between the icon and label
-                so when the tab is selected the label slides down 
+               when the tab is selected the label slides down 
                 and the icon slides up 
               */
               AnimatedContainer(
@@ -421,10 +364,7 @@ class _TabItemState extends State<TabItem> {
               ),
 
               // The Label
-              /*
-                Use Animated Opacity to fade in and out the Label
-                depending on the tab slected status
-              */
+
               AnimatedOpacity(
                 duration: Duration(milliseconds: 200),
                 opacity: widget.selected ? 1.0 : 0.0,
@@ -432,8 +372,9 @@ class _TabItemState extends State<TabItem> {
                   "${widget.title}",
                   style: TextStyle(
                     fontSize: 12,
-                    letterSpacing: 1.2,
-                    color: Colors.black54,
+                    letterSpacing: .5,
+                    fontFamily: "Avenir",
+                    color: Colors.black26,
                   ),
                 ),
               ),
@@ -445,12 +386,6 @@ class _TabItemState extends State<TabItem> {
   }
 }
 
-/*
-  The clip path 
-  used to make the 'hole' smoothly match the tabs bar baskground
-  creating a soft curve
-  !! Can be improved !!
-*/
 class CustomShape extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
